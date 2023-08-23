@@ -14,19 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="DataExtractionRules">
+
         <activity
-            android:name=".JavaSampleActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:name=".KotlinSampleActivity"
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".KotlinSampleActivity"
-            android:theme="@style/SplashTheme" />
         <activity
             android:name=".RemoveAdsExampleActivity"
             android:theme="@style/SplashTheme" />

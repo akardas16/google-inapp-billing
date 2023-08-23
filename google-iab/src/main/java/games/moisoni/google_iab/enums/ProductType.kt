@@ -1,6 +1,6 @@
-package games.moisoni.google_iab.enums;
+package games.moisoni.google_iab.enums
 
-public enum ProductType {
+enum class ProductType {
     INAPP,
     SUBS,
     COMBINED

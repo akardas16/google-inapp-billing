@@ -10,8 +10,9 @@ import com.github.hariprasanths.bounceview.BounceView
 import games.moisoni.google_iab.BillingConnector
 import games.moisoni.google_iab.BillingEventListener
 import games.moisoni.google_iab.enums.ErrorType
-import games.moisoni.google_iab.enums.PurchasedResult
 import games.moisoni.google_iab.enums.ProductType
+import games.moisoni.google_iab.enums.PurchasedResult
+
 import games.moisoni.google_iab.enums.SupportState
 import games.moisoni.google_iab.models.BillingResponse
 import games.moisoni.google_iab.models.ProductInfo
@@ -83,7 +84,7 @@ class KotlinSampleActivity : AppCompatActivity() {
                 .connect() //to connect billing client with Play Console
 
         billingConnector.setBillingEventListener(object : BillingEventListener {
-            override fun onProductsFetched(productDetails: MutableList<ProductInfo>) {
+            override fun onProductsFetched(productDetails: List<ProductInfo>) {
                 var product: String
                 var price: String
 
@@ -115,9 +116,10 @@ class KotlinSampleActivity : AppCompatActivity() {
                 }
             }
 
+
             override fun onPurchasedProductsFetched(
-                    productType: ProductType,
-                    purchases: MutableList<PurchaseInfo>
+                productType: ProductType,
+                purchases: List<PurchaseInfo>
             ) {
                 /*
                 * This will be called even when no purchased products are returned by the API
@@ -160,7 +162,7 @@ class KotlinSampleActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onProductsPurchased(purchases: MutableList<PurchaseInfo>) {
+            override fun onProductsPurchased(purchases: List<PurchaseInfo>) {
                 var product: String
                 var purchaseToken: String
 

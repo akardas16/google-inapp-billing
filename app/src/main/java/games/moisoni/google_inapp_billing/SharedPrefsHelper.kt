@@ -1,108 +1,98 @@
-package games.moisoni.google_inapp_billing;
+package games.moisoni.google_inapp_billing
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.SharedPreferences
+import android.text.TextUtils
 
-public final class SharedPrefsHelper {
-
-    private static final String DEFAULT_SUFFIX = "_preferences";
-    private static SharedPreferences mPrefs;
-
-    private static void initPrefs(Context context, String prefsName, int mode) {
-        mPrefs = context.getSharedPreferences(prefsName, mode);
+object SharedPrefsHelper {
+    private const val DEFAULT_SUFFIX = "_preferences"
+    private var mPrefs: SharedPreferences? = null
+    private fun initPrefs(context: Context, prefsName: String?, mode: Int) {
+        mPrefs = context.getSharedPreferences(prefsName, mode)
     }
 
-    public static SharedPreferences getPreferences() {
-        if (mPrefs != null) {
-            return mPrefs;
+    private val preferences: SharedPreferences?
+        get() {
+            if (mPrefs != null) {
+                return mPrefs
+            }
+            throw RuntimeException("SharedPrefsHelper class is not correctly instantiated")
         }
 
-        throw new RuntimeException("SharedPrefsHelper class is not correctly instantiated");
+    fun getInt(key: String?, defValue: Int): Int {
+        return preferences!!.getInt(key, defValue)
     }
 
-    public static int getInt(final String key, final int defValue) {
-        return getPreferences().getInt(key, defValue);
+    fun getBoolean(key: String?, defValue: Boolean): Boolean {
+        return preferences!!.getBoolean(key, defValue)
     }
 
-    public static boolean getBoolean(final String key, final boolean defValue) {
-        return getPreferences().getBoolean(key, defValue);
+    fun getString(key: String?, defValue: String?): String? {
+        return preferences!!.getString(key, defValue)
     }
 
-    public static String getString(final String key, final String defValue) {
-        return getPreferences().getString(key, defValue);
+    fun putInt(key: String?, value: Int) {
+        val editor = preferences!!.edit()
+        editor.putInt(key, value)
+        editor.apply()
     }
 
-    public static void putInt(final String key, final int value) {
-        final SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putInt(key, value);
-        editor.apply();
+    fun putBoolean(key: String?, value: Boolean) {
+        val editor = preferences!!.edit()
+        editor.putBoolean(key, value)
+        editor.apply()
     }
 
-    public static void putBoolean(final String key, final boolean value) {
-        final SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(key, value);
-        editor.apply();
+    fun putString(key: String?, value: String?) {
+        val editor = preferences!!.edit()
+        editor.putString(key, value)
+        editor.apply()
     }
 
-    public static void putString(final String key, final String value) {
-        final SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public final static class Builder {
-
-        private String mKey;
-        private Context mContext;
-
-        private int mMode = -1;
-        private boolean mUseDefault = false;
-
-        public Builder setPrefsName(final String prefsName) {
-            mKey = prefsName;
-            return this;
+    class Builder {
+        private var mKey: String? = null
+        private var mContext: Context? = null
+        private var mMode = -1
+        private var mUseDefault = false
+        fun setPrefsName(prefsName: String?): Builder {
+            mKey = prefsName
+            return this
         }
 
-        public Builder setContext(final Context context) {
-            mContext = context;
-            return this;
+        fun setContext(context: Context?): Builder {
+            mContext = context
+            return this
         }
 
-        public Builder setMode(final int mode) {
-            if (mode == ContextWrapper.MODE_PRIVATE) {
-                mMode = mode;
+        fun setMode(mode: Int): Builder {
+            mMode = if (mode == ContextWrapper.MODE_PRIVATE) {
+                mode
             } else {
-                throw new RuntimeException("Mode can only be set to ContextWrapper.MODE_PRIVATE");
+                throw RuntimeException("Mode can only be set to ContextWrapper.MODE_PRIVATE")
             }
-
-            return this;
+            return this
         }
 
-        public Builder setUseDefaultSharedPreference(boolean defaultSharedPreference) {
-            mUseDefault = defaultSharedPreference;
-            return this;
+        fun setUseDefaultSharedPreference(defaultSharedPreference: Boolean): Builder {
+            mUseDefault = defaultSharedPreference
+            return this
         }
 
-        public void build() {
+        fun build() {
             if (mContext == null) {
-                throw new RuntimeException("Please set the context before building SharedPrefsHelper instance");
+                throw RuntimeException("Please set the context before building SharedPrefsHelper instance")
             }
-
             if (TextUtils.isEmpty(mKey)) {
-                mKey = mContext.getPackageName();
+                mKey = mContext!!.packageName
             }
-
             if (mUseDefault) {
-                mKey += DEFAULT_SUFFIX;
+                mKey += DEFAULT_SUFFIX
             }
-
             if (mMode == -1) {
-                mMode = ContextWrapper.MODE_PRIVATE;
+                mMode = ContextWrapper.MODE_PRIVATE
             }
-
-            SharedPrefsHelper.initPrefs(mContext, mKey, mMode);
+            initPrefs(mContext!!, mKey, mMode)
         }
     }
 }

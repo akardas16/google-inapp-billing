@@ -1,100 +1,48 @@
-package games.moisoni.google_iab.models;
+package games.moisoni.google_iab.models
 
-import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetails.PricingPhase
 
-import java.util.ArrayList;
-import java.util.List;
+class SubscriptionOfferDetails(
+    val offerId: String,
+    pricingPhases: List<PricingPhase>?,
+    val offerTags: List<String>,
+    val offerToken: String,
+    val basePlanId: String
+) {
+    private val pricingPhases: MutableList<PricingPhases>
 
-public class SubscriptionOfferDetails {
-
-    private final String offerId;
-    private final List<String> offerTags;
-    private final String offerToken;
-    private final String basePlanId;
-    private final List<PricingPhases> pricingPhases;
-
-    public SubscriptionOfferDetails(String offerId, List<ProductDetails.PricingPhase> pricingPhases, List<String> offerTags, String offerToken, String basePlanId) {
-        this.offerId = offerId;
-        this.offerTags = offerTags;
-        this.offerToken = offerToken;
-        this.basePlanId = basePlanId;
-
-        List<ProductDetails.PricingPhase> pricingPhaseList = pricingPhases;
-        this.pricingPhases = new ArrayList<>();
-
+    init {
+        val pricingPhaseList = pricingPhases
+        this.pricingPhases = ArrayList()
         if (pricingPhaseList != null) {
-            for (ProductDetails.PricingPhase pricingPhase : pricingPhaseList) {
-                PricingPhases newPricingPhase = createPricingPhase(pricingPhase);
-                this.pricingPhases.add(newPricingPhase);
+            for (pricingPhase in pricingPhaseList) {
+                val newPricingPhase = createPricingPhase(pricingPhase)
+                this.pricingPhases.add(newPricingPhase)
             }
         }
     }
 
-    public String getOfferId() {
-        return offerId;
+    fun getPricingPhases(): List<PricingPhases> {
+        return pricingPhases
     }
 
-    public List<String> getOfferTags() {
-        return offerTags;
+    private fun createPricingPhase(pricingPhase: PricingPhase): PricingPhases {
+        return PricingPhases(
+            pricingPhase.formattedPrice,
+            pricingPhase.priceAmountMicros,
+            pricingPhase.priceCurrencyCode,
+            pricingPhase.billingPeriod,
+            pricingPhase.billingCycleCount,
+            pricingPhase.recurrenceMode
+        )
     }
 
-    public String getOfferToken() {
-        return offerToken;
-    }
-
-    public String getBasePlanId() {
-        return basePlanId;
-    }
-
-    public List<PricingPhases> getPricingPhases() {
-        return pricingPhases;
-    }
-
-    private PricingPhases createPricingPhase(ProductDetails.PricingPhase pricingPhase) {
-        return new PricingPhases(pricingPhase.getFormattedPrice(), pricingPhase.getPriceAmountMicros(), pricingPhase.getPriceCurrencyCode(),
-                pricingPhase.getBillingPeriod(), pricingPhase.getBillingCycleCount(), pricingPhase.getRecurrenceMode());
-    }
-
-    public class PricingPhases {
-
-        private final String formattedPrice;
-        private final long priceAmountMicros;
-        private final String priceCurrencyCode;
-        private final String billingPeriod;
-        private final int billingCycleCount;
-        private final int recurrenceMode;
-
-        public PricingPhases(String formattedPrice, long priceAmountMicros, String priceCurrencyCode, String billingPeriod, int billingCycleCount, int recurrenceMode) {
-            this.formattedPrice = formattedPrice;
-            this.priceAmountMicros = priceAmountMicros;
-            this.priceCurrencyCode = priceCurrencyCode;
-            this.billingPeriod = billingPeriod;
-            this.billingCycleCount = billingCycleCount;
-            this.recurrenceMode = recurrenceMode;
-        }
-
-        public String getFormattedPrice() {
-            return formattedPrice;
-        }
-
-        public long getPriceAmountMicros() {
-            return priceAmountMicros;
-        }
-
-        public String getPriceCurrencyCode() {
-            return priceCurrencyCode;
-        }
-
-        public String getBillingPeriod() {
-            return billingPeriod;
-        }
-
-        public int getBillingCycleCount() {
-            return billingCycleCount;
-        }
-
-        public int getRecurrenceMode() {
-            return recurrenceMode;
-        }
-    }
+    inner class PricingPhases(
+        val formattedPrice: String,
+        val priceAmountMicros: Long,
+        val priceCurrencyCode: String,
+        val billingPeriod: String,
+        val billingCycleCount: Int,
+        val recurrenceMode: Int
+    )
 }

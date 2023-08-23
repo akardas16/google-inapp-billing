@@ -1,6 +1,6 @@
-package games.moisoni.google_iab.enums;
+package games.moisoni.google_iab.enums
 
-public enum SupportState {
+enum class SupportState {
     SUPPORTED,
     NOT_SUPPORTED,
     DISCONNECTED

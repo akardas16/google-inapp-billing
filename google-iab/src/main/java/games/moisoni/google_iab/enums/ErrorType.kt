@@ -1,6 +1,6 @@
-package games.moisoni.google_iab.enums;
+package games.moisoni.google_iab.enums
 
-public enum ErrorType {
+enum class ErrorType {
     CLIENT_NOT_READY,
     CLIENT_DISCONNECTED,
     PRODUCT_NOT_EXIST,

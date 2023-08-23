@@ -1,6 +1,6 @@
-package games.moisoni.google_iab.enums;
+package games.moisoni.google_iab.enums
 
-public enum SkuProductType {
+enum class SkuProductType {
     CONSUMABLE,
     NON_CONSUMABLE,
     SUBSCRIPTION
